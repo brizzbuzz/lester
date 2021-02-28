@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev-frontend": "next dev",
+    "dev-backend": "tauri dev",
     "build": "next build",
-    "start": "next start",
-    "tauri": "tauri"
+    "start": "next start"
   },
   "dependencies": {
     "next": "10.0.7",

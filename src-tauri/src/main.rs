@@ -1,12 +1,17 @@
 #![cfg_attr(
-  all(not(debug_assertions), target_os = "windows"),
-  windows_subsystem = "windows"
+all(not(debug_assertions), target_os = "windows"),
+windows_subsystem = "windows"
 )]
 
 mod cmd;
 
 fn main() {
   tauri::AppBuilder::new()
+    .setup(|_webview, _source| {
+      tauri::event::listen(String::from("js-event"), move |msg| {
+        println!("got js-event with message '{:?}'", msg);
+      });
+    })
     .invoke_handler(|_webview, arg| {
       use cmd::Cmd::*;
       match serde_json::from_str(arg) {
