@@ -10,30 +10,29 @@ jobs:
   check-build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
-  steps:
-    - uses: actions/checkout@v2
-    - name: setup node
-      uses: actions/setup-node@v1
-      with:
-        node-version: 15
-    - name: install rust stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-    - name: install webkit2gtk
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y webkit2gtk-4.0
-    - name: yarn setup
-      run: yarn
-    - name: frontend build distribution
-      run: yarn build
-    - name: install tauri
-      run: cargo install tauri-bundler --force
-    - name: build tauri app
-      run: tauri build
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - name: install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+      - name: install webkit2gtk
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.0
+      - name: yarn setup
+        run: yarn
+      - name: frontend build distribution
+        run: yarn build
+      - name: install tauri
+        run: cargo install tauri-bundler --force
+      - name: build tauri app
+        run: tauri build
 
   create-release:
     needs: check-build
