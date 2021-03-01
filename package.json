@@ -6,7 +6,8 @@
     "dev-frontend": "next dev",
     "dev-backend": "tauri dev",
     "build": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "tauri": "tauri"
   },
   "dependencies": {
     "next": "10.0.7",

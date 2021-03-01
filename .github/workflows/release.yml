@@ -1,58 +1,44 @@
-name: Release
-
-on: pull_request # TODO Remove once build is confirmed to work
-
-#on:
-#  push:
-#    branches: [ main ]
+name: "publish"
+on: [ pull_request ] # TODO Change once confirmed working
+#push:
+#  branches:
+#    - release
 
 jobs:
-  check-build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  publish-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - name: setup node
         uses: actions/setup-node@v1
         with:
           node-version: 15
-      - name: install rust stable
+      - name: install Rust stable
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          profile: minimal
-      - name: install webkit2gtk
+      - name: install tauri bundler
+        run: cargo install tauri-bundler --force
+      - name: install webkit2gtk (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
-      - name: yarn setup
-        run: yarn
-      - name: frontend build distribution
-        run: yarn build
-      - name: install tauri
-        run: cargo install tauri-bundler --force
-      - name: build tauri app
-        run: tauri build
-
-  create-release:
-    needs: check-build
-    runs-on: ubuntu-latest
-    outputs:
-      RELEASE_UPLOAD_URL: ${{ steps.create_tauri_release.outputs.upload_url }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 15
-      - name: create release
-        id: create_tauri_release
-        uses: jbolda/create-release@v1.1.0
+      - name: install app dependencies and build it
+        # If using the Vue CLI plugin, tauri:build will be run automatically by tauri-action
+        # and you can remove `&& yarn build` from this command
+        run: yarn && yarn build
+      - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ matrix.package.name }}-v${{ env.PACKAGE_VERSION }}
-          release_name: 'Release lester app v${{ env.PACKAGE_VERSION }}'
-          body: 'See the assets to download this version and install.'
+          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: "App v__VERSION__"
+          body: "See the assets to download this version and install."
           draft: true
           prerelease: false
