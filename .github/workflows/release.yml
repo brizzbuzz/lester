@@ -44,8 +44,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup node
         uses: actions/setup-node@v1
-          with:
-            node-version: 15
+        with:
+          node-version: 15
       - name: create release
         id: create_tauri_release
         uses: jbolda/create-release@v1.1.0
