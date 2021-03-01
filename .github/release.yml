@@ -1,8 +1,10 @@
 name: Release
 
-on:
-  push:
-    branches: [ main ]
+on: pull_request # TODO Remove once build is confirmed to work
+
+#on:
+#  push:
+#    branches: [ main ]
 
 jobs:
   check-build:
