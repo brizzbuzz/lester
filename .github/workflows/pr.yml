@@ -1,10 +1,9 @@
-name: "publish"
-push:
-  branches:
-    - release
+name: PR Tests
+on: [pull_request]
 
 jobs:
-  publish-tauri:
+  # TODO Should add yarn tests for front end as well as tests for rust backend, and maybe linter?
+  build-lester:
     strategy:
       fail-fast: false
       matrix:
@@ -16,7 +15,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 15
+          node-version: 12
       - name: install Rust stable
         uses: actions-rs/toolchain@v1
         with:
@@ -29,15 +28,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
       - name: install app dependencies and build it
-        # If using the Vue CLI plugin, tauri:build will be run automatically by tauri-action
-        # and you can remove `&& yarn build` from this command
         run: yarn && yarn build
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: "App v__VERSION__"
-          body: "See the assets to download this version and install."
-          draft: true
-          prerelease: false
