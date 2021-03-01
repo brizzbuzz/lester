@@ -5,7 +5,7 @@
   "scripts": {
     "dev-frontend": "next dev",
     "dev-backend": "tauri dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start"
   },
   "dependencies": {
