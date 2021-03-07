@@ -1,4 +1,4 @@
-# Setup 
+# Setup
 
 1. Install Node and Yarn
 2. Install Rust
