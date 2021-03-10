@@ -1,18 +1,29 @@
 {
-  "name": "lester",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev-frontend": "next dev",
-    "dev-backend": "tauri dev",
-    "build": "next build && next export",
-    "start": "next start",
-    "tauri": "tauri"
+  "name": "src-root",
+  "version": "0.0.1",
+  "description": "Lester Frontend",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "7.12.10",
+    "@babel/preset-react": "7.12.10",
+    "babel-loader": "8.2.2",
+    "html-webpack-plugin": "4.5.1",
+    "serve": "11.3.2",
+    "webpack": "5.18.0",
+    "webpack-cli": "4.5.0",
+    "webpack-dev-server": "3.11.2"
   },
   "dependencies": {
-    "next": "10.0.7",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "tauri": "^0.14.1"
+    "tauri": "^0.14.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  },
+  "scripts": {
+    "start": "webpack-cli serve",
+    "tauri": "tauri",
+    "build": "webpack --mode production",
+    "serve": "serve dist -p 3001",
+    "clean": "rm -rf dist"
   }
 }
